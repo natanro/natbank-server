@@ -31,6 +31,7 @@ public class Account {
         this.user = user;
         AccountMaker accountMaker = accountMakerRepository.findById(1L).get();
         this.number = accountMaker.getNumber();
+        this.agency = accountMaker.getAgency();
         this.balance = 1000.0;
 	}
 
