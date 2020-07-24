@@ -24,8 +24,20 @@ public class User {
     private String name;
     private String email;
     private String password;
+    private String cpf;
 
-    public Account getAccount() {
+    public User() {
+    }
+    
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+	public Account getAccount() {
         return account;
     }
 
@@ -55,5 +67,10 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User {id: "+this.id+" name: "+this.name+" email: "+this.email+" cpf: "+this.cpf+"}";
     }
 }
