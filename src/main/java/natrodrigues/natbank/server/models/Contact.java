@@ -8,6 +8,9 @@ public class Contact {
     private String nome;
     private Long accountNumber;
 
+    public Contact() {
+    }
+
     public Contact(String nome, Long accountNumber) {
         this.nome = nome;
         this.accountNumber = accountNumber;
