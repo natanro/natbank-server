@@ -46,9 +46,9 @@ public class AccountController {
         configureAccountMaker();
         Account newAccount = new Account(user, accountMakerRepository);
         
+        accountRepository.save(newAccount);
         user.setAccount(newAccount);
         userRepository.save(user);
-        accountRepository.save(newAccount);
         
         // TODO: enviar e-mail para o email do usuario cadastrado
         
