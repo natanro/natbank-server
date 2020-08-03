@@ -4,6 +4,8 @@ import javax.validation.constraints.NotNull;
 
 import natrodrigues.natbank.server.models.Contact;
 import natrodrigues.natbank.server.models.Transaction;
+import natrodrigues.natbank.server.models.TransactionId;
+import natrodrigues.natbank.server.models.TransactionType;
 
 public class TransactionForm {
 
@@ -40,9 +42,10 @@ public class TransactionForm {
         return value;
     }
 
-	public Transaction convert() {
+    public Transaction convert(TransactionType type) {
         Transaction transaction = new Transaction(this.value, this.contact);
-        transaction.setId(this.uuid);
+        transaction.setId(new TransactionId(this.uuid, type));
+        transaction.setReciever(this.contact);
         return transaction;
 	}
 

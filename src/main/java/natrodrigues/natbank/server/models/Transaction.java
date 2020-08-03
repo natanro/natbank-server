@@ -4,45 +4,46 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "transaction")
 public class Transaction {
     
-    @Id
+    @EmbeddedId
     @Column(name = "transaction_id")
-    private String id;
+    private TransactionId id;
 
     @Embedded
-    private Contact contact;
+    private Contact receiver;
+
     private Double value;
     private LocalDateTime creationDate = LocalDateTime.now();
-    @Enumerated(EnumType.STRING)
-    private TransactionType type;
 
     public Transaction() {
     }
 
-    public Transaction(Double value, Contact contact) {
+    public Transaction(Double value, Contact reciever) {
         this.value = value;
-        this.contact = contact;
+        this.receiver = reciever;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
+    public TransactionId getId() {
         return id;
     }
 
-    public Contact getContact() {
-        return contact;
+    public void setId(TransactionId id) {
+        this.id = id;
+    }
+
+    public Contact getReciever() {
+        return receiver;
+    }
+
+    public void setReciever(Contact reciever) {
+        this.receiver = reciever;
     }
 
     public Double getValue() {
@@ -54,11 +55,7 @@ public class Transaction {
     }
 
 	public void setType(TransactionType type) {
-        this.type = type;
-    }
-    
-    public TransactionType getType() {
-        return type;
+        id.setType(type);
     }
 
 }

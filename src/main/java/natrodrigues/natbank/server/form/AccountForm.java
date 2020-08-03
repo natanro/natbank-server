@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.validation.constraints.NotNull;
 
 import natrodrigues.natbank.server.models.Account;
+import natrodrigues.natbank.server.models.Contact;
 import natrodrigues.natbank.server.repository.AccountRepository;
 
 public class AccountForm {
@@ -13,6 +14,8 @@ public class AccountForm {
     private Long id;
     @NotNull
     private Long number;
+    @NotNull
+    private String name;
 
     public void setNumber(Long number) {
         this.number = number;
@@ -30,6 +33,14 @@ public class AccountForm {
         this.id = id;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
 	public Account convert(AccountRepository accountRepository) {
         Optional<Account> account = accountRepository.findByNumber(this.number);
         if(account.isPresent()) {
@@ -37,5 +48,9 @@ public class AccountForm {
         } else {
             return null;
         }
+	}
+
+	public Contact toContact() {
+		return new Contact(this.name, this.number);
 	}
 }

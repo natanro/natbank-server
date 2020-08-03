@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 import natrodrigues.natbank.server.config.exception.AccountException;
 import natrodrigues.natbank.server.repository.AccountMakerRepository;
+import natrodrigues.natbank.server.repository.TransactionRepository;
 
 @Entity
 @Table(name = "account")
@@ -79,6 +80,10 @@ public class Account {
         this.id = id;
     }
 
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
     @Override
     public String toString() {
         return "Account {id: "+this.id+" agency: "+this.agency+" number: "+this.number+" balance: "+this.balance+"}";
@@ -86,23 +91,33 @@ public class Account {
 
 	public void addTransaction(Transaction transaction, TransactionType type) throws AccountException {
         if(type == TransactionType.SEND) {
-            sendTransaction(transaction, type);
+            sendTransaction(transaction);
         } else {
-            recieveTransaction(transaction, type);
+            recieveTransaction(transaction);
         }
-	}
-
-    private void recieveTransaction(Transaction transaction, TransactionType type) {
-        this.balance += transaction.getValue();
         transaction.setType(type);
         transactions.add(transaction);
     }
+    
+    public void addTransaction(Transaction transaction, TransactionRepository transactionRepository)
+     throws AccountException {
+        if(transaction.getId().getType() == TransactionType.SEND) {
+            sendTransaction(transaction);
+        } else {
+            recieveTransaction(transaction);
+        }
+        transactionRepository.save(transaction);
+        transactions.add(transaction);
+	}
 
-    private void sendTransaction(Transaction transaction, TransactionType type) throws AccountException {
+    private void recieveTransaction(Transaction transaction) {
+        this.balance += transaction.getValue();
+    }
+
+    private void sendTransaction(Transaction transaction) throws AccountException {
         if(this.balance < transaction.getValue()) {
             throw new AccountException("balance", "Transaction value must be less or equal to account's balance");
         }
         this.balance -= transaction.getValue();
-        transaction.setType(type);
     }
 }
