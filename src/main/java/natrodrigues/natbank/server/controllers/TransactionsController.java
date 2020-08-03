@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import natrodrigues.natbank.server.config.exception.FormError;
 import natrodrigues.natbank.server.config.exception.NatbankException;
+import natrodrigues.natbank.server.form.AccountForm;
 import natrodrigues.natbank.server.form.TransactionForm;
 import natrodrigues.natbank.server.models.Account;
 import natrodrigues.natbank.server.models.Transaction;
@@ -35,27 +37,40 @@ public class TransactionsController {
     private AccountService accountService;
     @Autowired
     private TransactionRepository transactionRepository;
-    
+
     @PostMapping
     @Transactional
-    public ResponseEntity<?> newTransaction(@RequestBody @Valid TransactionForm transactionForm, Errors errors)
-     throws NatbankException {
-        if(errors.hasErrors()) {
+    public ResponseEntity<Object> newTransaction(@RequestBody @Valid TransactionForm transactionForm, Errors errors)
+            throws NatbankException {
+        if (errors.hasErrors()) {
             return ResponseEntity.badRequest().body(FormError.getErrorList(errors));
         }
         transactionService.verify(transactionForm);
         accountService.verify(transactionForm.getContact().getAccountNumber());
 
-        Transaction transaction = transactionForm.convert();
-        Account senderAccount = transactionForm.getAccountForm().convert(accountRepository);
-        Account recieverAccount = accountRepository.findByNumber(
-            transaction.getContact().getAccountNumber()).get();
-        
-        senderAccount.addTransaction(transaction, TransactionType.SEND);
-        recieverAccount.addTransaction(transaction, TransactionType.RECIEVE);
+        Transaction senderTransaction = transactionForm.convert(TransactionType.SEND);
+        Transaction recieverTransaction = transactionForm.convert(TransactionType.RECIEVE);
 
-        transactionRepository.save(transaction);
+        Account senderAccount = transactionForm.getAccountForm().convert(accountRepository);
+        Account recieverAccount = accountRepository.findByNumber(senderTransaction.getReciever().getAccountNumber())
+                .get();
+
+        senderAccount.addTransaction(senderTransaction, transactionRepository);
+        recieverAccount.addTransaction(recieverTransaction, transactionRepository);
+
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllTransactions(@RequestBody @Valid AccountForm accountForm, Errors errors)
+            throws NatbankException {
+        if(errors.hasErrors()) {
+            return ResponseEntity.badRequest().body(FormError.getErrorList(errors));
+        }
+        accountService.verify(accountForm.getNumber());
+        Account account = accountRepository.findByNumber(accountForm.getNumber()).get();
+
+        return ResponseEntity.ok().body(account.getTransactions());
     }
 
 }
