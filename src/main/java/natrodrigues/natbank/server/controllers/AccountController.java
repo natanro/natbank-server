@@ -6,6 +6,9 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import natrodrigues.natbank.server.config.exception.NatbankException;
+import natrodrigues.natbank.server.services.Services;
+import natrodrigues.natbank.server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,17 +34,19 @@ public class AccountController {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private AccountRepository accountRepository;
-
     @Autowired
     private AccountMakerRepository accountMakerRepository;
+    @Autowired
+    private Services<UserForm> userService;
     
     @PostMapping("/new")
     @Transactional
     public ResponseEntity<AccountDto> newAccount(@RequestBody @Valid UserForm userForm,
-            UriComponentsBuilder uriBuilder) {
+            UriComponentsBuilder uriBuilder) throws NatbankException {
+        userService.verify(userForm);
+
         User user = userForm.convert();
         configureAccountMaker();
         Account newAccount = new Account(user, accountMakerRepository);
@@ -49,8 +54,6 @@ public class AccountController {
         accountRepository.save(newAccount);
         user.setAccount(newAccount);
         userRepository.save(user);
-        
-        // TODO: enviar e-mail para o email do usuario cadastrado
         
         URI uri = uriBuilder.path("/account/{id}").buildAndExpand(newAccount.getId()).toUri();
         return ResponseEntity.created(uri).body(new AccountDto(newAccount));
@@ -70,7 +73,7 @@ public class AccountController {
 
     private void configureAccountMaker() {
         Optional<AccountMaker> accountMaker = accountMakerRepository.findById(1L);
-        if(!accountMaker.isPresent()) {
+        if(accountMaker.isEmpty()) {
             accountMakerRepository.save(new AccountMaker(1L, "0001", 12344L));
         }
     }
