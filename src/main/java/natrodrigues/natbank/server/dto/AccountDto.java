@@ -8,12 +8,14 @@ public class AccountDto {
     private String agency;
     private Long number;
     private Double balance;
+    private String name;
 
 	public AccountDto(Account newAccount) {
         this.id = newAccount.getId();
         this.agency = newAccount.getAgency();
         this.number = newAccount.getNumber();
         this.balance = newAccount.getBalance();
+        this.name = newAccount.getUser().getName();
     }
     
     public Long getId() {
@@ -32,4 +34,7 @@ public class AccountDto {
         return number;
     }
 
+    public String getName() {
+        return name;
+    }
 }

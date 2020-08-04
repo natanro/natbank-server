@@ -46,13 +46,16 @@ public class TransactionsController {
             return ResponseEntity.badRequest().body(FormError.getErrorList(errors));
         }
         transactionService.verify(transactionForm);
-        accountService.verify(transactionForm.getContact().getAccountNumber());
+        accountService.verify(transactionForm.getAccountForm());
+        accountService.verify(transactionForm.getContact());
 
         Transaction senderTransaction = transactionForm.convert(TransactionType.SEND);
+        senderTransaction.setContact(transactionForm.getContact());
         Transaction recieverTransaction = transactionForm.convert(TransactionType.RECIEVE);
+        recieverTransaction.setContact(transactionForm.getAccountForm().toContact());
 
         Account senderAccount = transactionForm.getAccountForm().convert(accountRepository);
-        Account recieverAccount = accountRepository.findByNumber(senderTransaction.getReciever().getAccountNumber())
+        Account recieverAccount = accountRepository.findByNumber(senderTransaction.getContact().getAccountNumber())
                 .get();
 
         senderAccount.addTransaction(senderTransaction, transactionRepository);
@@ -67,7 +70,7 @@ public class TransactionsController {
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().body(FormError.getErrorList(errors));
         }
-        accountService.verify(accountForm.getNumber());
+        accountService.verify(accountForm);
         Account account = accountRepository.findByNumber(accountForm.getNumber()).get();
 
         return ResponseEntity.ok().body(account.getTransactions());
