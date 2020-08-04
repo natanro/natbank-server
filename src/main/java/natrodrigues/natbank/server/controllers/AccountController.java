@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import natrodrigues.natbank.server.config.exception.NatbankException;
+import natrodrigues.natbank.server.services.Services;
 import natrodrigues.natbank.server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class AccountController {
     @Autowired
     private AccountMakerRepository accountMakerRepository;
     @Autowired
-    private UserService userService;
+    private Services<UserForm> userService;
     
     @PostMapping("/new")
     @Transactional

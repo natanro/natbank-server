@@ -3,6 +3,8 @@ package natrodrigues.natbank.server.controllers;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import natrodrigues.natbank.server.models.Contact;
+import natrodrigues.natbank.server.services.Services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,13 +32,15 @@ import natrodrigues.natbank.server.services.TransactionService;
 public class TransactionsController {
 
     @Autowired
-    private TransactionService transactionService;
+    private Services<TransactionForm> transactionService;
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
-    private AccountService accountService;
+    private Services<AccountForm> accountService;
     @Autowired
     private TransactionRepository transactionRepository;
+    @Autowired
+    private Services<Contact> contactServices;
 
     @PostMapping
     @Transactional
@@ -47,7 +51,7 @@ public class TransactionsController {
         }
         transactionService.verify(transactionForm);
         accountService.verify(transactionForm.getAccountForm());
-        accountService.verify(transactionForm.getContact());
+        contactServices.verify(transactionForm.getContact());
 
         Transaction senderTransaction = transactionForm.convert(TransactionType.SEND);
         senderTransaction.setContact(transactionForm.getContact());

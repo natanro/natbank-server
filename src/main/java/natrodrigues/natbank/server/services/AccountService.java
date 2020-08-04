@@ -1,5 +1,6 @@
 package natrodrigues.natbank.server.services;
 
+import natrodrigues.natbank.server.config.exception.NatbankException;
 import natrodrigues.natbank.server.form.AccountForm;
 import natrodrigues.natbank.server.models.Account;
 import natrodrigues.natbank.server.models.Contact;
@@ -12,12 +13,13 @@ import natrodrigues.natbank.server.repository.AccountRepository;
 import java.util.Optional;
 
 @Service
-public class AccountService {
+public class AccountService implements Services<AccountForm> {
 
     @Autowired
     private AccountRepository accountRepository;
 
-	public void verify(AccountForm accountForm) throws AccountException {
+	@Override
+	public void verify(AccountForm accountForm) throws NatbankException {
 		Optional<Account> optionalAccount = accountRepository.findByNumber(accountForm.getNumber());
 		if(optionalAccount.isPresent() == false) {
 			throw new AccountException("account number",
@@ -29,13 +31,4 @@ public class AccountService {
 					"Id or user name must be compatible with account informations");
 		}
 	}
-
-	public void verify(Contact contact) throws AccountException {
-		Optional<Account> optionalAccount = accountRepository.findByNumber(contact.getAccountNumber());
-		if(optionalAccount.isPresent() == false) {
-			throw new AccountException("account number",
-				"Account number must be from an existing account");
-		}
-	}
-
 }
