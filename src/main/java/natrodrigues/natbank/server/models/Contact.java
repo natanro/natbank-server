@@ -5,14 +5,14 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Contact {
 
-    private String nome;
+    private String name;
     private Long accountNumber;
 
     public Contact() {
     }
 
-    public Contact(String nome, Long accountNumber) {
-        this.nome = nome;
+    public Contact(String name, Long accountNumber) {
+        this.name = name;
         this.accountNumber = accountNumber;
     }
 
@@ -24,12 +24,12 @@ public class Contact {
         this.accountNumber = accountNumber;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
     
 }

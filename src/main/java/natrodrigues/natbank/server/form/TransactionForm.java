@@ -45,7 +45,7 @@ public class TransactionForm {
     public Transaction convert(TransactionType type) {
         Transaction transaction = new Transaction(this.value, this.contact);
         transaction.setId(new TransactionId(this.uuid, type));
-        transaction.setReciever(this.contact);
+        transaction.setContact(this.contact);
         return transaction;
 	}
 

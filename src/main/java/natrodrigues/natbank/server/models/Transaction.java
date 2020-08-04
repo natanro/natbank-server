@@ -17,7 +17,7 @@ public class Transaction {
     private TransactionId id;
 
     @Embedded
-    private Contact receiver;
+    private Contact contact;
 
     private Double value;
     private LocalDateTime creationDate = LocalDateTime.now();
@@ -25,9 +25,9 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(Double value, Contact reciever) {
+    public Transaction(Double value, Contact contact) {
         this.value = value;
-        this.receiver = reciever;
+        this.contact = contact;
     }
 
     public TransactionId getId() {
@@ -38,12 +38,12 @@ public class Transaction {
         this.id = id;
     }
 
-    public Contact getReciever() {
-        return receiver;
+    public Contact getContact() {
+        return contact;
     }
 
-    public void setReciever(Contact reciever) {
-        this.receiver = reciever;
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 
     public Double getValue() {
