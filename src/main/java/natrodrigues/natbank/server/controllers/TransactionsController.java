@@ -17,15 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import natrodrigues.natbank.server.config.exception.FormError;
 import natrodrigues.natbank.server.config.exception.NatbankException;
-import natrodrigues.natbank.server.form.AccountForm;
-import natrodrigues.natbank.server.form.TransactionForm;
+import natrodrigues.natbank.server.controllers.form.AccountForm;
+import natrodrigues.natbank.server.controllers.form.TransactionForm;
 import natrodrigues.natbank.server.models.Account;
 import natrodrigues.natbank.server.models.Transaction;
 import natrodrigues.natbank.server.models.TransactionType;
-import natrodrigues.natbank.server.repository.AccountRepository;
-import natrodrigues.natbank.server.repository.TransactionRepository;
-import natrodrigues.natbank.server.services.AccountService;
-import natrodrigues.natbank.server.services.TransactionService;
+import natrodrigues.natbank.server.controllers.repository.AccountRepository;
+import natrodrigues.natbank.server.controllers.repository.TransactionRepository;
 
 @RestController
 @RequestMapping("/transactions")

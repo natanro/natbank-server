@@ -1,4 +1,4 @@
-package natrodrigues.natbank.server.repository;
+package natrodrigues.natbank.server.controllers.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

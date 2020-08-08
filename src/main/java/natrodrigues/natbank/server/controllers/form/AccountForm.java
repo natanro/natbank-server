@@ -1,4 +1,4 @@
-package natrodrigues.natbank.server.form;
+package natrodrigues.natbank.server.controllers.form;
 
 import java.util.Optional;
 
@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import natrodrigues.natbank.server.models.Account;
 import natrodrigues.natbank.server.models.Contact;
-import natrodrigues.natbank.server.repository.AccountRepository;
+import natrodrigues.natbank.server.controllers.repository.AccountRepository;
 
 public class AccountForm {
 

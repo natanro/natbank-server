@@ -1,4 +1,4 @@
-package natrodrigues.natbank.server.dto;
+package natrodrigues.natbank.server.controllers.dto;
 
 import natrodrigues.natbank.server.models.Transaction;
 
