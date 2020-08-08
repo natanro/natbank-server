@@ -1,13 +1,12 @@
-package natrodrigues.natbank.server.form;
+package natrodrigues.natbank.server.controllers.form;
+
+import natrodrigues.natbank.server.models.User;
+import org.hibernate.validator.constraints.br.CPF;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.br.CPF;
-
-import natrodrigues.natbank.server.models.User;
 
 public class UserForm {
 
@@ -19,7 +18,6 @@ public class UserForm {
     private String email;
     @NotEmpty
     @NotNull
-    @Length(min = 4, max = 4)
     private String password;
     @CPF
     @NotEmpty
@@ -63,7 +61,7 @@ public class UserForm {
         user.setCpf(this.cpf);
         user.setEmail(this.email);
         user.setName(this.name);
-        user.setPassword(this.password);
+        user.setPassword(new BCryptPasswordEncoder(10).encode(this.password));
         return user;
 	}
 }

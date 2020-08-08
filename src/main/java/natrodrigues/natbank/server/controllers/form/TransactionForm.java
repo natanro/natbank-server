@@ -1,4 +1,4 @@
-package natrodrigues.natbank.server.form;
+package natrodrigues.natbank.server.controllers.form;
 
 import javax.validation.constraints.NotNull;
 

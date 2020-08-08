@@ -8,7 +8,6 @@ import javax.validation.Valid;
 
 import natrodrigues.natbank.server.config.exception.NatbankException;
 import natrodrigues.natbank.server.services.Services;
-import natrodrigues.natbank.server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,14 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import natrodrigues.natbank.server.dto.AccountDto;
-import natrodrigues.natbank.server.form.UserForm;
+import natrodrigues.natbank.server.controllers.dto.AccountDto;
+import natrodrigues.natbank.server.controllers.form.UserForm;
 import natrodrigues.natbank.server.models.Account;
 import natrodrigues.natbank.server.models.AccountMaker;
 import natrodrigues.natbank.server.models.User;
-import natrodrigues.natbank.server.repository.AccountMakerRepository;
-import natrodrigues.natbank.server.repository.AccountRepository;
-import natrodrigues.natbank.server.repository.UserRepository;
+import natrodrigues.natbank.server.controllers.repository.AccountMakerRepository;
+import natrodrigues.natbank.server.controllers.repository.AccountRepository;
+import natrodrigues.natbank.server.controllers.repository.UserRepository;
 
 @RestController
 @RequestMapping("/account")

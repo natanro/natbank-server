@@ -14,8 +14,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import natrodrigues.natbank.server.config.exception.AccountException;
-import natrodrigues.natbank.server.repository.AccountMakerRepository;
-import natrodrigues.natbank.server.repository.TransactionRepository;
+import natrodrigues.natbank.server.controllers.repository.AccountMakerRepository;
+import natrodrigues.natbank.server.controllers.repository.TransactionRepository;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "account")
@@ -31,6 +33,7 @@ public class Account {
     @OneToOne(mappedBy = "account")
     private User user;
     @OneToMany(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     private List<Transaction> transactions = new ArrayList<>();
 
     public Account() {
