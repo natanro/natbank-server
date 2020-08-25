@@ -80,7 +80,7 @@ public class AccountController {
         }
     }
 
-    @GetMapping
+    @PostMapping
     public ResponseEntity<?> verifyCredentials(@Valid @RequestBody UserCredentialForm credentialForm) {
         Optional<User> optionalUser = userRepository.findByCpf(credentialForm.getCpf());
         if (optionalUser.isPresent()) {
