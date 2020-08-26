@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import natrodrigues.natbank.server.config.exception.NatbankException;
+import natrodrigues.natbank.server.controllers.dto.UserDto;
 import natrodrigues.natbank.server.controllers.form.UserCredentialForm;
 import natrodrigues.natbank.server.services.Services;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,12 +82,25 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<?> verifyCredentials(@Valid @RequestBody UserCredentialForm credentialForm) {
+    public ResponseEntity<?> accountInformation(@Valid @RequestBody UserCredentialForm credentialForm) {
         Optional<User> optionalUser = userRepository.findByCpf(credentialForm.getCpf());
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             if (new BCryptPasswordEncoder(10).matches(credentialForm.getPassword(), user.getPassword()))
                 return ResponseEntity.ok(new AccountDto(user.getAccount()));
+            else
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Password is not valid");
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("CPF is not valid");
+    }
+
+    @PostMapping("/user")
+    public ResponseEntity<?> userInformation(@Valid @RequestBody UserCredentialForm credentialForm) {
+        Optional<User> optionalUser = userRepository.findByCpf(credentialForm.getCpf());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if (new BCryptPasswordEncoder(10).matches(credentialForm.getPassword(), user.getPassword()))
+                return ResponseEntity.ok(new UserDto(user));
             else
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Password is not valid");
         }
